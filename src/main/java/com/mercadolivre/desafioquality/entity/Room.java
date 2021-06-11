@@ -2,6 +2,8 @@ package com.mercadolivre.desafioquality.entity;
 
 import lombok.*;
 
+import javax.validation.constraints.Size;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -9,6 +11,7 @@ import lombok.*;
 @ToString
 @Builder
 public class Room {
+
     private String room_name;
     private Double room_width;
     private Double room_length;

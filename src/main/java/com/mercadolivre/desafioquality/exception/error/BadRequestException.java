@@ -1,14 +1,14 @@
 package com.mercadolivre.desafioquality.exception.error;
 
 
-public class NotFoundException extends RuntimeException{
+public class BadRequestException extends RuntimeException{
     private static final long serialVersionUID = 1l;
 
-    public NotFoundException(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 
-    public NotFoundException(String message, Throwable cause) {
+    public BadRequestException(String message, Throwable cause) {
         super(message, cause);
     }
 }

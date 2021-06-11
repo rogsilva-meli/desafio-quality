@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -26,13 +27,13 @@ public class PropertyController {
     }
 
     @PostMapping("/properties")
-    public ResponseEntity<Property> create(@RequestBody PropertyRequestDTO pDTO){
+    public ResponseEntity<Property> create(@Valid @RequestBody PropertyRequestDTO pDTO){
         Property property = propertyService.saveProperty(pDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(property);
     }
 
     @PutMapping("/properties/{name}")
-    public ResponseEntity<PropertyRequestDTO> modify(@PathVariable String name, @RequestBody PropertyRequestDTO p){
+    public ResponseEntity<PropertyRequestDTO> modify(@PathVariable String name, @Valid @RequestBody PropertyRequestDTO p){
         PropertyRequestDTO pDTO = propertyService.modifyProperty(name, p);
         return ResponseEntity.status(HttpStatus.OK).body(pDTO);
     }

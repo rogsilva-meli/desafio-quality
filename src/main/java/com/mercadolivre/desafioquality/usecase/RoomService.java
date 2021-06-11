@@ -3,6 +3,7 @@ package com.mercadolivre.desafioquality.usecase;
 import com.mercadolivre.desafioquality.entity.dto.request.RoomRequestDTO;
 import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.Room;
+import com.mercadolivre.desafioquality.exception.error.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -77,16 +78,16 @@ public class RoomService {
 
 
     public Room getRoom(String nameProperty, String nameRoom) {
-        Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new IndexOutOfBoundsException("Name property not found"));
+        Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
         Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
-        Room room = first.orElseThrow(() -> new IndexOutOfBoundsException("Name room not found"));
+        Room room = first.orElseThrow(() -> new NotFoundException("Name room not found"));
         return room;
     }
 
-    public RoomRequestDTO modifyProperty(String nameProperty, String nameRoom, RoomRequestDTO r) {
-        Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new IndexOutOfBoundsException("Name property not found"));
+    public RoomRequestDTO modify(String nameProperty, String nameRoom, RoomRequestDTO r) {
+        Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
         Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
-        Room room = first.orElseThrow(() -> new IndexOutOfBoundsException("Name room not found"));
+        Room room = first.orElseThrow(() -> new NotFoundException("Name room not found"));
         room.setRoom_name(r.getRoom_name());
         room.setRoom_width(r.getRoom_width());
         room.setRoom_length(r.getRoom_length());
@@ -94,10 +95,10 @@ public class RoomService {
         return convertEntityToRequestDTO(room);
     }
 
-    public void deleteProperty(String nameProperty, String nameRoom) {
-        Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new IndexOutOfBoundsException("Name property not found"));
+    public void delete(String nameProperty, String nameRoom) {
+        Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
         Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
-        Room room = first.orElseThrow(() -> new IndexOutOfBoundsException("Name room not found"));
+        Room room = first.orElseThrow(() -> new NotFoundException("Name room not found"));
         List<Room> roomList = property.getRooms();
         roomList.remove(room);
         property.setRooms(roomList);

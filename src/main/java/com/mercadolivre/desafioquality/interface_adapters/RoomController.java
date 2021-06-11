@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -29,7 +30,7 @@ public class RoomController {
     }
 
     @PostMapping("/rooms")
-    public ResponseEntity<Room> create(@RequestBody RoomRequestDTO rDTO){
+    public ResponseEntity<Room> create(@Valid @RequestBody RoomRequestDTO rDTO){
         Room room = roomService.saveRoom(rDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(room);
     }
@@ -44,8 +45,8 @@ public class RoomController {
     @PutMapping("/rooms/{nameProperty}/{nameRoom}")
     public ResponseEntity<RoomRequestDTO> modify(@PathVariable String nameProperty,
                                        @PathVariable String nameRoom,
-                                       @RequestBody RoomRequestDTO r){
-        RoomRequestDTO rDTO = roomService.modifyProperty(nameProperty, nameRoom, r);
+                                       @Valid @RequestBody RoomRequestDTO r){
+        RoomRequestDTO rDTO = roomService.modify(nameProperty, nameRoom, r);
         return ResponseEntity.status(HttpStatus.OK).body(rDTO);
     }
 
@@ -53,7 +54,7 @@ public class RoomController {
     @ResponseStatus(HttpStatus.OK)
     public void  delete(@PathVariable String nameProperty,
                         @PathVariable String nameRoom){
-        roomService.deleteProperty(nameProperty, nameRoom);
+        roomService.delete(nameProperty, nameRoom);
     }
 
 

@@ -3,6 +3,7 @@ package com.mercadolivre.desafioquality.usecase;
 import com.mercadolivre.desafioquality.entity.dto.request.PropertyRequestDTO;
 import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.Room;
+import com.mercadolivre.desafioquality.exception.error.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -66,13 +67,13 @@ public class PropertyService {
 
 
     public Property getPropertyForRoom(String name) {
-        Property p = findByName(name).orElseThrow(()-> new IndexOutOfBoundsException("Name property not found"));
+        Property p = findByName(name).orElseThrow(()-> new NotFoundException("Name property not found"));
         return p;
     }
 
     public PropertyRequestDTO modifyProperty(String name, PropertyRequestDTO request) {
         Property p = convertRequestDTOToEntity(request);
-        Property propertyByName = findByName(name).orElseThrow(()-> new IndexOutOfBoundsException("Name property not found"));
+        Property propertyByName = findByName(name).orElseThrow(()-> new NotFoundException("Name property not found"));
 
         propertyByName.setProp_name(request.getProp_name());
         propertyByName.setProp_district(request.getProp_district());
@@ -81,7 +82,7 @@ public class PropertyService {
     }
 
     public void deleteProperty(String name) {
-        Property p = findByName(name).orElseThrow(()-> new IndexOutOfBoundsException("Name property not found"));
+        Property p = findByName(name).orElseThrow(()-> new NotFoundException("Name property not found"));
         properties.remove(p);
     }
 }
