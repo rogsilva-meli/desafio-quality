@@ -3,6 +3,7 @@ package com.mercadolivre.desafioquality.usecase;
 import com.mercadolivre.desafioquality.entity.dto.request.RoomRequestDTO;
 import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.Room;
+import com.mercadolivre.desafioquality.entity.dto.response.RoomResponseDTO;
 import com.mercadolivre.desafioquality.exception.error.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -34,24 +35,25 @@ public class RoomService {
         return r;
     }
 
-    public RoomRequestDTO convertEntityToRequestDTO(Room r){
-        RoomRequestDTO rDTO = RoomRequestDTO.builder()
+    public RoomResponseDTO convertEntityToResponseDTO(Room r){
+        RoomResponseDTO rDTO = RoomResponseDTO.builder()
                 .room_name(r.getRoom_name())
                 .room_length(r.getRoom_length())
                 .room_width(r.getRoom_width())
-                .property(r.getProperty())
+                .squareMetersRoom(calculateMeters(r))
                 .build();
-
         return rDTO;
     }
 
-    //
-
-    public List<Room> getAllRooms(){
-        return rooms;
+    public List<RoomResponseDTO> getAllRooms(){
+        List<RoomResponseDTO> list = new ArrayList<>();
+        for(Room r: rooms){
+            list.add(convertEntityToResponseDTO(r));
+        }
+        return list;
     }
 
-    public Room saveRoom(RoomRequestDTO rDTO){
+    public RoomResponseDTO saveRoom(RoomRequestDTO rDTO){
 
         Room r = convertRequestDTOToEntity(rDTO);
 
@@ -66,7 +68,7 @@ public class RoomService {
         listRooms.add(r);
         property.setRooms(listRooms);
 
-        return r;
+        return convertEntityToResponseDTO(r);
     }
 
     public Optional<Room> findByName(String name){
@@ -76,15 +78,15 @@ public class RoomService {
         return obj;
     }
 
-
-    public Room getRoom(String nameProperty, String nameRoom) {
+    public RoomResponseDTO getRoom(String nameProperty, String nameRoom) {
         Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
         Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
         Room room = first.orElseThrow(() -> new NotFoundException("Name room not found"));
-        return room;
+
+        return convertEntityToResponseDTO(room);
     }
 
-    public RoomRequestDTO modify(String nameProperty, String nameRoom, RoomRequestDTO r) {
+    public RoomResponseDTO modify(String nameProperty, String nameRoom, RoomRequestDTO r) {
         Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
         Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
         Room room = first.orElseThrow(() -> new NotFoundException("Name room not found"));
@@ -92,7 +94,7 @@ public class RoomService {
         room.setRoom_width(r.getRoom_width());
         room.setRoom_length(r.getRoom_length());
 
-        return convertEntityToRequestDTO(room);
+        return convertEntityToResponseDTO(room);
     }
 
     public void delete(String nameProperty, String nameRoom) {
@@ -102,5 +104,11 @@ public class RoomService {
         List<Room> roomList = property.getRooms();
         roomList.remove(room);
         property.setRooms(roomList);
+    }
+
+    public Double calculateMeters(Room r){
+        Double squareMeters = 0.0;
+        squareMeters = r.getRoom_length() * r.getRoom_width();
+        return squareMeters;
     }
 }

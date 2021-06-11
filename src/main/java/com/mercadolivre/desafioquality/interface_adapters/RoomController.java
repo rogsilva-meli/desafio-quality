@@ -2,6 +2,7 @@ package com.mercadolivre.desafioquality.interface_adapters;
 
 import com.mercadolivre.desafioquality.entity.dto.request.RoomRequestDTO;
 import com.mercadolivre.desafioquality.entity.Room;
+import com.mercadolivre.desafioquality.entity.dto.response.RoomResponseDTO;
 import com.mercadolivre.desafioquality.usecase.PropertyService;
 import com.mercadolivre.desafioquality.usecase.RoomService;
 import org.springframework.http.HttpStatus;
@@ -24,29 +25,29 @@ public class RoomController {
     }
 
     @GetMapping("/rooms")
-    public ResponseEntity<List<Room>> getAll(){
-        List<Room> list = roomService.getAllRooms();
+    public ResponseEntity<List<RoomResponseDTO>> getAll(){
+        List<RoomResponseDTO> list = roomService.getAllRooms();
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
     @PostMapping("/rooms")
-    public ResponseEntity<Room> create(@Valid @RequestBody RoomRequestDTO rDTO){
-        Room room = roomService.saveRoom(rDTO);
+    public ResponseEntity<RoomResponseDTO> create(@Valid @RequestBody RoomRequestDTO rDTO){
+        RoomResponseDTO room = roomService.saveRoom(rDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(room);
     }
 
     @GetMapping("/rooms/{nameProperty}/{nameRoom}")
-    public ResponseEntity<Room> getRoom(@PathVariable String nameProperty,
+    public ResponseEntity<RoomResponseDTO> getRoom(@PathVariable String nameProperty,
                                         @PathVariable String nameRoom){
-        Room r = roomService.getRoom(nameProperty, nameRoom);
+        RoomResponseDTO r = roomService.getRoom(nameProperty, nameRoom);
         return ResponseEntity.status(HttpStatus.OK).body(r);
     }
 
     @PutMapping("/rooms/{nameProperty}/{nameRoom}")
-    public ResponseEntity<RoomRequestDTO> modify(@PathVariable String nameProperty,
+    public ResponseEntity<RoomResponseDTO> modify(@PathVariable String nameProperty,
                                        @PathVariable String nameRoom,
                                        @Valid @RequestBody RoomRequestDTO r){
-        RoomRequestDTO rDTO = roomService.modify(nameProperty, nameRoom, r);
+        RoomResponseDTO rDTO = roomService.modify(nameProperty, nameRoom, r);
         return ResponseEntity.status(HttpStatus.OK).body(rDTO);
     }
 
