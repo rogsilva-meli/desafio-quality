@@ -40,7 +40,7 @@ public class RoomService {
                 .room_name(r.getRoom_name())
                 .room_length(r.getRoom_length())
                 .room_width(r.getRoom_width())
-                .squareMetersRoom(calculateMeters(r))
+                .squareMetersRoom(propertyService.calculateMetersRoom(r))
                 .build();
         return rDTO;
     }
@@ -71,13 +71,6 @@ public class RoomService {
         return convertEntityToResponseDTO(r);
     }
 
-    public Optional<Room> findByName(String name){
-        Optional<Room> obj = rooms.stream().
-                filter(p -> p.getRoom_name().equalsIgnoreCase(name)).
-                findFirst();
-        return obj;
-    }
-
     public RoomResponseDTO getRoom(String nameProperty, String nameRoom) {
         Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
         Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
@@ -104,11 +97,5 @@ public class RoomService {
         List<Room> roomList = property.getRooms();
         roomList.remove(room);
         property.setRooms(roomList);
-    }
-
-    public Double calculateMeters(Room r){
-        Double squareMeters = 0.0;
-        squareMeters = r.getRoom_length() * r.getRoom_width();
-        return squareMeters;
     }
 }

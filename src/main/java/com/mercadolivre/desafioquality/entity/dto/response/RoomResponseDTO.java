@@ -8,6 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @Builder
+@EqualsAndHashCode
 public class RoomResponseDTO {
 
     private String room_name;

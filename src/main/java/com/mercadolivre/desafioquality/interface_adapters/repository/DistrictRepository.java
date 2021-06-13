@@ -1,11 +1,11 @@
-package com.mercadolivre.desafioquality.repository;
+package com.mercadolivre.desafioquality.interface_adapters.repository;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@Repository
+@Service
 public class DistrictRepository {
 
     Map<String, Double> districts = new HashMap<>();

@@ -1,4 +1,4 @@
-package com.mercadolivre.desafioquality.interface_adapters;
+package com.mercadolivre.desafioquality.interface_adapters.controller;
 
 import com.mercadolivre.desafioquality.entity.dto.request.PropertyRequestDTO;
 import com.mercadolivre.desafioquality.entity.Property;

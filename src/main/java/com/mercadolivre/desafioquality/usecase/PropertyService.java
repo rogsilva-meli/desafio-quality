@@ -6,7 +6,7 @@ import com.mercadolivre.desafioquality.entity.Room;
 import com.mercadolivre.desafioquality.entity.dto.response.PropertyResponseDTO;
 import com.mercadolivre.desafioquality.entity.dto.response.RoomResponseDTO;
 import com.mercadolivre.desafioquality.exception.error.NotFoundException;
-import com.mercadolivre.desafioquality.repository.DistrictRepository;
+import com.mercadolivre.desafioquality.interface_adapters.repository.DistrictRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -125,11 +125,9 @@ public class PropertyService {
 
     public Double propertyValue(Property p){
         Map<String, Double> districts = districtRepository.getDistricts();
-        if(districts.containsKey(p.getProp_district())) {
-            return p.getTotalMeters() * districts.get(p.getProp_district());
-        }else{
-            throw new NotFoundException("Distric not found in list: "+districts);
-        }
+        verifyDistrict(p.getProp_district());
+        return p.getTotalMeters() * districts.get(p.getProp_district());
+
     }
 
     public RoomResponseDTO biggestRoom(Property p){
@@ -143,5 +141,13 @@ public class PropertyService {
         }
     }
 
+    public boolean verifyDistrict(String p) {
+        Map<String, Double> districts = districtRepository.getDistricts();
+        if(districts.containsKey(p)) {
+            return true;
+        }else{
+            throw new NotFoundException("Distric not found in list: "+districts);
+        }
 
+    }
 }
