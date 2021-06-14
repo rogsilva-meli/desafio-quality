@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "c2abab91-497a-4141-bb05-0a47ac56ecbc",
+		"name": "Desafio Quality - Room",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registrar um comodo",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"room_name\": \"Sala\",\n    \"room_width\": 10,\n    \"room_length\": 5,\n    \"property\": \"casa\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/rooms",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rooms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar comodo por nome da propriedade e nome da casa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/rooms/casa/quarto",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rooms",
+						"casa",
+						"quarto"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modificar comodo por propriedade e comodo",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"room_name\": \"Varanda\",\n    \"room_width\": 10,\n    \"room_length\": 5    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/rooms/casa/sala",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rooms",
+						"casa",
+						"sala"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Excluir comodo por propriedade",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/rooms/casa/sala",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"rooms",
+						"casa",
+						"sala"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

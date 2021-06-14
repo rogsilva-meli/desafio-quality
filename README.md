@@ -12,7 +12,12 @@ POST - localhost:8080/properties
 }
 ```
 
-#### - Request para criar um Bairro -
+#### - Lista de Bairros válidos -
+```json
+{ Mandaqui=5400.0, Moema=8100.0, Tatuapé=4960.0, Pinheiros=9000.0, Santana=5190.0}
+```
+
+#### - Request para criar um Cômodo -
 POST - localhost:8080/rooms
 ```json
 {
@@ -23,20 +28,32 @@ POST - localhost:8080/rooms
 }
 ```
 
-#### - Lista de Bairros válidos -
-```json
-{ Mandaqui=5400.0, Moema=8100.0, Tatuapé=4960.0, Pinheiros=9000.0, Santana=5190.0}
-```
-
 #### - EndPoint para listar as propriedades e respostas dos exercícios -
 GET - localhost:8080/rooms
+**Retorno**
 ```json
-{
-    "room_name": "Sala",
-    "room_width": 2,
-    "room_length": 3,
-    "property": "casa"
-}
+[
+    {
+        "prop_name": "Casa",
+        "prop_district": "Mandaqui",
+        "totalMeters": 50.0,
+        "valueProperty": 270000.0,
+        "biggestRoom": {
+            "room_name": "Sala",
+            "room_width": 10.0,
+            "room_length": 5.0,
+            "squareMetersRoom": 50.0
+        },
+        "rooms": [
+            {
+                "room_name": "Sala",
+                "room_width": 10.0,
+                "room_length": 5.0,
+                "squareMetersRoom": 50.0
+            }
+        ]
+    }
+]
 ```
 
 
