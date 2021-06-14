@@ -41,4 +41,5 @@ public class ResourceExceptionHandler {
                 msg +" " + e.getLocalizedMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
+
 }

@@ -5,6 +5,7 @@ import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.Room;
 import com.mercadolivre.desafioquality.entity.dto.response.PropertyResponseDTO;
 import com.mercadolivre.desafioquality.entity.dto.response.RoomResponseDTO;
+import com.mercadolivre.desafioquality.exception.error.BadRequestException;
 import com.mercadolivre.desafioquality.exception.error.NotFoundException;
 import com.mercadolivre.desafioquality.interface_adapters.repository.DistrictRepository;
 import org.springframework.stereotype.Service;
@@ -52,12 +53,15 @@ public class PropertyService {
     }
 
     public PropertyResponseDTO saveProperty(PropertyRequestDTO pDTO){
-        Property p = convertRequestDTOToEntity(pDTO);
-        p.setRooms(new ArrayList<>());
-        p.setTotalMeters(0.0);
-        properties.add(p);
-
-        return convertEntityToResponseDTO(p);
+        if(findByName(pDTO.getProp_name()).isPresent()){
+            throw new BadRequestException("Name property already exists");
+        } else{
+            Property p = convertRequestDTOToEntity(pDTO);
+            p.setRooms(new ArrayList<>());
+            p.setTotalMeters(0.0);
+            properties.add(p);
+            return convertEntityToResponseDTO(p);
+        }
     }
 
     public Optional<Property> findByName(String name){
@@ -67,7 +71,7 @@ public class PropertyService {
         return obj;
     }
 
-    public Property getPropertyForRoom(String name) {
+    public Property getProperty(String name) {
         Property p = findByName(name).orElseThrow(()-> new NotFoundException("Name property not found"));
         return p;
     }

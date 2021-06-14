@@ -4,6 +4,7 @@ import com.mercadolivre.desafioquality.entity.dto.request.RoomRequestDTO;
 import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.Room;
 import com.mercadolivre.desafioquality.entity.dto.response.RoomResponseDTO;
+import com.mercadolivre.desafioquality.exception.error.BadRequestException;
 import com.mercadolivre.desafioquality.exception.error.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class RoomService {
 
     // Conversão de RequestDTO
     public Room convertRequestDTOToEntity(RoomRequestDTO rDTO){
-        Property p = propertyService.getPropertyForRoom(rDTO.getProperty());
+        Property p = propertyService.getProperty(rDTO.getProperty());
 
         Room r = Room.builder()
                 .room_name(rDTO.getRoom_name())
@@ -57,26 +58,33 @@ public class RoomService {
 
         Room r = convertRequestDTOToEntity(rDTO);
 
-        Property property = propertyService.getPropertyForRoom(rDTO.getProperty());
+        Property property = propertyService.getProperty(rDTO.getProperty());
 
-        List<Room> listRooms = property.getRooms();
+        if(getRoomByName(r.getRoom_name(), property).isPresent()){
+            throw new BadRequestException("Name room already exists");
+        } else {
+            List<Room> listRooms = property.getRooms();
+            r.setRoom_name(rDTO.getRoom_name());
+            r.setRoom_length(rDTO.getRoom_length());
+            r.setRoom_width(rDTO.getRoom_width());
+            r.setProperty(property.getProp_name());
+            listRooms.add(r);
+            property.setRooms(listRooms);
 
-        r.setRoom_name(rDTO.getRoom_name());
-        r.setRoom_length(rDTO.getRoom_length());
-        r.setRoom_width(rDTO.getRoom_width());
-        r.setProperty(property.getProp_name());
-        listRooms.add(r);
-        property.setRooms(listRooms);
-
-        return convertEntityToResponseDTO(r);
+            return convertEntityToResponseDTO(r);
+        }
     }
 
     public RoomResponseDTO getRoom(String nameProperty, String nameRoom) {
         Property property = propertyService.findByName(nameProperty).orElseThrow(() -> new NotFoundException("Name property not found"));
-        Optional<Room> first = property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
-        Room room = first.orElseThrow(() -> new NotFoundException("Name room not found"));
+        Optional<Room> roomByName = getRoomByName(nameRoom, property);
+        Room room = roomByName.orElseThrow(() -> new NotFoundException("Name room not found"));
 
         return convertEntityToResponseDTO(room);
+    }
+
+    private Optional<Room> getRoomByName(String nameRoom, Property property) {
+        return property.getRooms().stream().filter(p -> p.getRoom_name().equalsIgnoreCase(nameRoom)).findFirst();
     }
 
     public RoomResponseDTO modify(String nameProperty, String nameRoom, RoomRequestDTO r) {

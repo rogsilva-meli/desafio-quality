@@ -15,7 +15,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -43,7 +46,7 @@ public class PropertyUnitTest {
     @DisplayName("A - Verificar o método de calcular metros quadrados")
     public void calculateSquareMetersTest(){
         Property p = PropertyUtilsTest.createNewProperty();
-
+        PropertyService mock = Mockito.mock(PropertyService.class);
         assertEquals(p.getTotalMeters(), propertyService.calculateMeters(p.getRooms()));
     }
 
@@ -61,9 +64,7 @@ public class PropertyUnitTest {
     @DisplayName("C - Deve lançar exceção ao tentar salvar com um bairro que não existe no repositório de bairros.")
     public void verifyIfInvalidDistrictsTest(){
         Property p = PropertyUtilsTest.createNewProperty();
-
         String district = "Paraguai";
-
         assertThrows(NotFoundException.class, ()-> propertyService.verifyDistrict(district));
     }
 
@@ -80,11 +81,12 @@ public class PropertyUnitTest {
     @Test
     @DisplayName("F - Verificar se a propriedade cadastrada é a mesma devolvida.")
     public void savePropertyTest(){
-       PropertyRequestDTO p = PropertyUtilsTest.createNewPropertyRequestDTO();
+       PropertyRequestDTO requestDTO = PropertyUtilsTest.createNewPropertyRequestDTO();
+       PropertyResponseDTO responseDTO = PropertyUtilsTest.createResponsePropertyEmpty();
 
-       PropertyResponseDTO pSaved = propertyService.saveProperty(p);
+       PropertyResponseDTO pSaved = propertyService.saveProperty(requestDTO);
 
-       assertEquals(pSaved, propertyService.saveProperty(p));
+       assertEquals(pSaved, responseDTO);
     }
 
     @Test

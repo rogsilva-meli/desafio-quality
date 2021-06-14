@@ -42,7 +42,7 @@ public class PropertyController {
     @GetMapping("/properties/{name}")
     public ResponseEntity<PropertyResponseDTO> getProperty(@PathVariable String name){
 
-        Property p = propertyService.getPropertyForRoom(name);
+        Property p = propertyService.getProperty(name);
         PropertyResponseDTO responseDTO = propertyService.convertEntityToResponseDTO(p);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDTO);

@@ -83,5 +83,18 @@ public class PropertyUtilsTest {
         return p;
     }
 
+    public static PropertyResponseDTO createResponsePropertyEmpty() {
+
+        PropertyResponseDTO p = PropertyResponseDTO.builder()
+                .prop_name("Casa")
+                .prop_district("Moema")
+                .totalMeters(0.0)
+                .valueProperty(0.0)
+                .biggestRoom(null)
+                .rooms(new ArrayList<RoomResponseDTO>())
+                .build();
+        return p;
+    }
+
 
 }
