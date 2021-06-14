@@ -3,6 +3,7 @@ package com.mercadolivre.desafioquality.utils;
 import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.Room;
 import com.mercadolivre.desafioquality.entity.dto.request.PropertyRequestDTO;
+import com.mercadolivre.desafioquality.entity.dto.request.RoomRequestDTO;
 import com.mercadolivre.desafioquality.entity.dto.response.PropertyResponseDTO;
 import com.mercadolivre.desafioquality.entity.dto.response.RoomResponseDTO;
 
@@ -72,13 +73,32 @@ public class PropertyUtilsTest {
 
     public static PropertyResponseDTO createResponseProperty() {
 
+        List<RoomResponseDTO> roomsGood = new ArrayList<>();
+
+        RoomResponseDTO roomA = RoomResponseDTO.builder()
+                .room_name("Sala")
+                .room_width(5.0)
+                .room_length(5.0)
+                .squareMetersRoom(5.0 * 5.0)
+                .build();
+
+        RoomResponseDTO roomB = RoomResponseDTO.builder()
+                .room_name("Quarto")
+                .room_width(10.0)
+                .room_length(5.0)
+                .squareMetersRoom(10.0 * 5.0)
+                .build();
+
+        roomsGood.add(roomA);
+        roomsGood.add(roomB);
+
         PropertyResponseDTO p = PropertyResponseDTO.builder()
                 .prop_name("Casa")
                 .prop_district("Moema")
                 .totalMeters(75.0)
                 .valueProperty(607500.0)
-                .biggestRoom(createNewRoomDTO().get(1))
-                .rooms(createNewRoomDTO())
+                .biggestRoom(roomB)
+                .rooms(roomsGood)
                 .build();
         return p;
     }
@@ -95,6 +115,19 @@ public class PropertyUtilsTest {
                 .build();
         return p;
     }
+
+    public static RoomRequestDTO createNewRequestDTO() {
+        RoomRequestDTO roomRequestDTO = RoomRequestDTO.builder()
+                .room_name("Moema")
+                .room_width(5.0)
+                .room_length(2.0)
+                .property("casa")
+                .build();
+
+        return roomRequestDTO;
+    }
+
+
 
 
 }

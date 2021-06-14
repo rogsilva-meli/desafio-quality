@@ -1,5 +1,6 @@
 package com.mercadolivre.desafioquality.entity.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mercadolivre.desafioquality.entity.Room;
 import lombok.*;

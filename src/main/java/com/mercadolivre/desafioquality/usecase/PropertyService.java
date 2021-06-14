@@ -10,6 +10,7 @@ import com.mercadolivre.desafioquality.exception.error.NotFoundException;
 import com.mercadolivre.desafioquality.interface_adapters.repository.DistrictRepository;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
@@ -154,4 +155,5 @@ public class PropertyService {
         }
 
     }
+
 }

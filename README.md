@@ -30,6 +30,7 @@ POST - localhost:8080/rooms
 
 #### - EndPoint para listar as propriedades e respostas dos exercícios -
 GET - localhost:8080/rooms
+
 **Retorno**
 ```json
 [

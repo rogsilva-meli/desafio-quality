@@ -2,11 +2,13 @@ package com.mercadolivre.desafioquality.integration_test;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolivre.desafioquality.entity.Property;
 import com.mercadolivre.desafioquality.entity.dto.request.PropertyRequestDTO;
 import com.mercadolivre.desafioquality.entity.dto.response.PropertyResponseDTO;
 import com.mercadolivre.desafioquality.interface_adapters.controller.PropertyController;
 import com.mercadolivre.desafioquality.usecase.PropertyService;
 import com.mercadolivre.desafioquality.utils.PropertyUtilsTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -45,6 +47,17 @@ public class PropertyIntegrationTest {
     @Autowired
     MockMvc mvc;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
+    Property property;
+
+    @BeforeEach
+    void setUp(){
+        this.property = PropertyUtilsTest.createNewProperty();
+    }
+
+
     @Test
     @DisplayName("A - Deve criar um livro com sucesso")
     public void createPropertyTest() throws Exception {
@@ -76,6 +89,9 @@ public class PropertyIntegrationTest {
 
         PropertyRequestDTO requestDTO = PropertyUtilsTest.createNewPropertyRequestDTO();
         requestDTO.setProp_name("casa");
+        //requestDTO.setProp_name("Casa pppppppppppppppppppsssssssssssssssssssssssssssssssssssssssssssssssssss");
+        //requestDTO.setProp_district("qualquer");
+        //requestDTO.setProp_district("Moema mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmnnnnnnnnnnnnn");
 
         // Cria objeto Json
         String json = new ObjectMapper().writeValueAsString(requestDTO);
@@ -95,25 +111,37 @@ public class PropertyIntegrationTest {
     @DisplayName("C - Deve retornar uma lista de propriedades")
     public void getAllPropertiesTest() throws Exception {
 
-        PropertyRequestDTO requestDTO = PropertyUtilsTest.createNewPropertyRequestDTO();
         PropertyResponseDTO responseDTO = PropertyUtilsTest.createResponseProperty();
+
         List<PropertyResponseDTO> listResponse = new ArrayList<>();
         listResponse.add(responseDTO);
 
         BDDMockito.given(propertyService.getAllProperties()).willReturn(List.of(responseDTO));
 
         // Cria objeto Json
-        String json = new ObjectMapper().writeValueAsString(requestDTO);
+        byte[] json = objectMapper.writeValueAsBytes(listResponse);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(PROPERTY_API)
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
 
         mvc
                 .perform(request)
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[0].prop_name").value(responseDTO.getProp_name()))
+                .andExpect(jsonPath("$.[0].prop_district").value(responseDTO.getProp_district()))
+                .andExpect(jsonPath("$.[0].totalMeters").value(75.0))
+                .andExpect(jsonPath("$.[0].valueProperty").value(607500.0))
+                .andExpect(jsonPath("$.[0].biggestRoom.room_name").value(responseDTO.getBiggestRoom().getRoom_name()))
+                .andExpect(jsonPath("$.[0].biggestRoom.room_width").value(responseDTO.getBiggestRoom().getRoom_width()))
+                .andExpect(jsonPath("$.[0].biggestRoom.room_length").value(responseDTO.getBiggestRoom().getRoom_length()))
+                .andExpect(jsonPath("$.[0].biggestRoom.squareMetersRoom").value(responseDTO.getBiggestRoom().getSquareMetersRoom()))
+                .andExpect(jsonPath("$.[0].rooms.[0].room_name").value(responseDTO.getRooms().get(0).getRoom_name()))
+                .andExpect(jsonPath("$.[0].rooms.[0].room_width").value(responseDTO.getRooms().get(0).getRoom_width()))
+                .andExpect(jsonPath("$.[0].rooms.[0].room_length").value(responseDTO.getRooms().get(0).getRoom_length()))
+                .andExpect(jsonPath("$.[0].rooms.[0].squareMetersRoom").value(responseDTO.getRooms().get(0).getSquareMetersRoom()));
     }
-
 
 }
 
